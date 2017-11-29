@@ -19,6 +19,15 @@ class CommandAutocompleteIterator : public completer::Iterator {
     const char **commands;
     // the item in the list we're currently iterating
     const char **ptr;
+    
+    
+    // the data passed to first, which we store.
+    // Other implementations might construct a list of candidates
+    // in first()
+    
+    const char *strstart;
+    int len;
+          
 public:
     
     CommandAutocompleteIterator(const char **c){
@@ -26,15 +35,19 @@ public:
         ptr=NULL;
     }
     
-    // get the first item
-    virtual void first(){
+    // get the first item, given the start of the word entered
+    // so far and its length.
+    
+    virtual void first(const char *stringstart,int length){
+        strstart = stringstart;
+        len = length;
         ptr = commands;
     }
     
     // skip (if necessary) to the next matching item
     // return the next item and increment the pointer
-    virtual const char *next(const char *stringstart,int len){
-        while(*ptr && strncmp(*ptr,stringstart,len))ptr++;
+    virtual const char *next(){
+        while(*ptr && strncmp(*ptr,strstart,len))ptr++;
         return *ptr++;
     }
 };

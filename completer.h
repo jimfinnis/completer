@@ -17,9 +17,9 @@ namespace completer {
 class Iterator {
 public:
     // reset the iterator - next() will get the first item
-    virtual void first()=0;
+    virtual void first(const char *stringstart,int len)=0;
     // get the next item which matches, or NULL.
-    virtual const char *next(const char *stringstart,int len)=0;
+    virtual const char *next()=0;
 };
 
 // call after EL_EDITOR has been set in your EditLine, to override

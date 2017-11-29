@@ -96,10 +96,10 @@ bool Completer::complete(){
     // then decrease the length if we find subsequent shorter
     // matches.
     
-    iter->first();
+    iter->first(ptr,len);
     
     int maxmatchlen=0;
-    while(name = iter->next(ptr,len)){
+    while(name = iter->next()){
         if(!matchlen){
             strncpy(match,name,250);
             match[250]=0;
@@ -166,8 +166,8 @@ void Completer::printCompletions() {
     // the gap between things.
     
     int gap=0;
-    iter->first();
-    while(const char *name = iter->next(ptr,len)){
+    iter->first(ptr,len);
+    while(const char *name = iter->next()){
         if(strlen(name)>gap)
             gap=strlen(name);
     }
@@ -175,9 +175,9 @@ void Completer::printCompletions() {
     
     
     // second pass - actually print
-    iter->first();
+    iter->first(ptr,len);
     int clen = 0;
-    while(const char *name = iter->next(ptr,len)){
+    while(const char *name = iter->next()){
         if(clen+gap>linelen){
             puts(buf);
             *buf=0;

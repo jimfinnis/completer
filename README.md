@@ -9,11 +9,8 @@ Create a subclass of `completer::Iterator`. This class will
 iterate through the possible strings, comparing them against the partial input string and returning them
 if they match.
 It must implement the following virtual methods:
-* `virtual void first()` : reset the iterator
-* `virtual const char *next(const char *stringstart,int len)`: 
-get the next matching string and advance the iterator, return the match
-or NULL if out of matches. The parameters are the characters typed so
-far and how many there are.
+* `virtual void first(const char *stringstart,int len)` : reset the iterator. The parameters are the characters typed so far and how many there are.
+* `virtual const char *next()`: get the next matching string and advance the iterator, return the match or NULL if out of matches.
 
 Create an instance of this class.
 
