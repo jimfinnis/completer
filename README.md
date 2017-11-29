@@ -19,7 +19,7 @@ Create an instance of this class.
 
 Then call `completer::setup()` passing three values:
 * The `EditLine` instance which will use this completer
-* A pointer to the completer instance
+* A pointer to the `Iterator` instance
 * A string of characters considered to be word breaks: the completer
 will run back through the input string until it finds either the start
 of the string or one of these characters, to indicate where the match
