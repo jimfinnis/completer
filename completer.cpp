@@ -154,11 +154,6 @@ void Completer::printCompletions() {
     // work out which iterator we should use
     Iterator *iter = getIterator(argc);
     
-    // don't print completions if we're just at the end
-    // of a word and there are no matches. If we don't
-    // check this, we'd print the entire completion list
-    // (like hitting tab-tab on an empty line)
-    
     putchar('\n');
     
     // not very portable. IF it fails, just set linelen
