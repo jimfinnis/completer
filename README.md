@@ -12,7 +12,8 @@ It must implement the following virtual methods:
 * `virtual void first()` : reset the iterator
 * `virtual const char *next(const char *stringstart,int len)`: 
 get the next matching string and advance the iterator, return the match
-or NULL if out of matches.
+or NULL if out of matches. The parameters are the characters typed so
+far and how many there are.
 
 Create an instance of this class.
 
