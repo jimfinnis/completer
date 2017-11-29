@@ -1,5 +1,6 @@
 # completer
 Simple string autocompleter for libedit / editline in C++. Allows tab-completion and double-tab to list possible completions.
+Permits simple context-sensitive completion by argument number (i.e. different "words" in the input can be completed in different ways).
 
 ## Usage
 Include `completer.h` and `completer.cpp` in your codebase. In files
