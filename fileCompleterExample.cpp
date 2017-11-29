@@ -7,7 +7,7 @@
 
 /*
  * 
- * UNFINISHED. Unstarted, even.
+ * UNFINISHED. Unstarted, even. Look at commandCompleterExample.cpp.
  *
  */
 
