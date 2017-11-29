@@ -16,13 +16,14 @@ const char *getPrompt(){
     return ">> ";
 }
 
-class FileAutocompleteIterator : public AutocompleteIterator {
+class FileAutocompleteIterator : public completer::Iterator {
 public:
     
     virtual void first(){
         
     }
     virtual const char *next(const char *stringstart,int len){
+        return NULL;
     }
 };
     
@@ -37,8 +38,8 @@ int main(int argc,char *argv[]){
     history(hist,&ev,H_SETSIZE,800);
     el_set(el,EL_HIST,history,hist);
     
-    FileAutocompleteIterator completer();
-    setupAutocomplete(el,&completer,"\t\n ");
+    FileAutocompleteIterator fileiter;
+    completer::setup(el,&fileiter,"\t\n ");
     
     for(;;){
         int count;
@@ -48,6 +49,6 @@ int main(int argc,char *argv[]){
         }
         else break;
     }
-    
+    completer::shutdown(el);
     return 0;
 }

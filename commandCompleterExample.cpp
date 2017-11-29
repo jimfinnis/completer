@@ -9,7 +9,7 @@ const char *getPrompt(){
     return ">> ";
 }
 
-class CommandAutocompleteIterator : public AutocompleteIterator {
+class CommandAutocompleteIterator : public completer::Iterator {
     const char **commands;
     const char **ptr;
 public:
@@ -39,11 +39,19 @@ int main(int argc,char *argv[]){
     history(hist,&ev,H_SETSIZE,800);
     el_set(el,EL_HIST,history,hist);
     
-    static const char *commands[] = {
+    static const char *commandsDefault[] = {
+        "somearg","anotherarg","thirdpossiblearg",NULL
+    };
+    CommandAutocompleteIterator completerDefault(commandsDefault);
+    
+    static const char *commandsFirst[] = {
         "foo","bar","baz","fish","abort",NULL
     };
-    CommandAutocompleteIterator completer(commands);
-    setupAutocomplete(el,&completer,"\t\n ");
+    CommandAutocompleteIterator completerFirst(commandsFirst);
+    
+    
+    completer::setup(el,&completerDefault,"\t\n ");
+    completer::setArgIterator(el,0,&completerFirst);
     
     for(;;){
         int count;
@@ -53,6 +61,6 @@ int main(int argc,char *argv[]){
         }
         else break;
     }
-    shutdownAutocomplete(el);
+    completer::shutdown(el);
     return 0;
 }
