@@ -12,6 +12,7 @@ if they match.
 It must implement the following virtual methods:
 * `virtual void first(const char *stringstart,int len)` : reset the iterator. The parameters are the characters typed so far and how many there are.
 * `virtual const char *next()`: get the next matching string and advance the iterator, return the match or NULL if out of matches.
+
 It may also implement:
 * `virtual bool doSpacePadding()`: if this returns true (as the default
 implementation does) this will append a space to unambiguous matches.
