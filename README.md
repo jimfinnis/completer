@@ -12,8 +12,19 @@ if they match.
 It must implement the following virtual methods:
 * `virtual void first(const char *stringstart,int len)` : reset the iterator. The parameters are the characters typed so far and how many there are.
 * `virtual const char *next()`: get the next matching string and advance the iterator, return the match or NULL if out of matches.
+It may also implement:
+* `virtual bool doSpacePadding()`: if this returns true (as the default
+implementation does) this will append a space to unambiguous matches.
+* `virtual const char *modString(const char *stringstart,int len)` :
+the first thing called when TAB is pressed, which may return a
+string to replace the entire word. It is typically used to put the
+input into a canonical form, for example tilde-expansion in a filename
+completer (see [Examples](#Examples), below). It can return NULL
+(the default) or a string which must be allocated with `malloc()`:
+it will be freed by the caller.
 
-Create an instance of this class.
+Next, create an instance of this class. This needs to be in scope
+during EditLine's run.
 
 Then call `completer::setup()` passing three values:
 * The `EditLine` instance which will use this completer
@@ -45,7 +56,9 @@ will set a different iterator to use for a given item. The parameters are
 * the index of the item in the line (0 for the first item)
 * a pointer to the `Iterator` to use.
 
-## Example
+## Examples
+
+### Basic usage
 A full example of a simple command completer can be found in
 `commandCompleterExample.cpp`. This allows each word in the input
 to be completed from a list of permitted words, given as an array 
@@ -53,3 +66,10 @@ of strings terminated by a NULL. This sets up two different iterators
 for the first item and the others, demonstrating context-sensitive
 completion.
 
+### File completion
+The file `fileCompleterExample.cpp` contains a file completion
+iterator, which is rather more complex than the previous example.
+
+The iterator uses the EditLine internal function
+`fn_tilde_expand()` to do username expansion. If this function
+changes in future versions of EditLine we could be in for trouble.
