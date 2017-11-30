@@ -21,7 +21,8 @@ string to replace the entire word. It is typically used to put the
 input into a canonical form, for example tilde-expansion in a filename
 completer (see [Examples](#Examples), below). It can return NULL
 (the default) or a string which must be allocated with `malloc()`:
-it will be freed by the caller.
+it will be freed by the caller. The parameters are the same
+as for `first()`: the word to be completed and its length.
 
 Next, create an instance of this class. This needs to be in scope
 during EditLine's run.
