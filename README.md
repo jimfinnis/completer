@@ -3,8 +3,8 @@ Simple string autocompleter for libedit / editline in C++. Allows tab-completion
 Permits simple context-sensitive completion by argument number (i.e. different "words" in the input can be completed in different ways).
 
 ## Usage
-Include `completer.h` and `completer.cpp` in your codebase. In files
-which use the completer, include `completer.h`.
+Include [completer.h](completer.h) and [completer.cpp](completer.cpp) in your codebase. In files
+which use the completer, #include [completer.h](completer.h).
 
 Create a subclass of `completer::Iterator`. This class will
 iterate through the possible strings, comparing them against the partial input string and returning them
@@ -62,14 +62,14 @@ will set a different iterator to use for a given item. The parameters are
 
 ### Basic usage
 A full example of a simple command completer can be found in
-`commandCompleterExample.cpp`. This allows each word in the input
+[commandCompleterExample.cpp](commandCompleterExample.cpp). This allows each word in the input
 to be completed from a list of permitted words, given as an array 
 of strings terminated by a NULL. This sets up two different iterators
 for the first item and the others, demonstrating context-sensitive
 completion.
 
 ### File completion
-The file `fileCompleterExample.cpp` contains a file completion
+The file [fileCompleterExample.cpp](fileCompleterExample.cpp) contains a file completion
 iterator, which is rather more complex than the previous example.
 
 The iterator uses the EditLine internal function
