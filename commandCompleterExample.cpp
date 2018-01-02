@@ -99,6 +99,8 @@ int main(int argc,char *argv[]){
     for(;;){
         int count;
         const char *line = el_gets(el,&count);
+        // if we got a result, print it out (note that editline
+        // returns string with a newline at the end)
         if(line){
             printf("* %s",line);
         }
