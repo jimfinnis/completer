@@ -59,6 +59,11 @@ will set a different iterator to use for a given item. The parameters are
 * a pointer to the `Iterator` to use.
 
 ## Examples
+The two examples can be built with 
+
+```  
+  mkdir build; cd build; cmake ..; make
+```
 
 ### Basic usage
 A full example of a simple command completer can be found in
