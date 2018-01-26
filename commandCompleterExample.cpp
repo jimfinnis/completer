@@ -10,33 +10,35 @@ const char *getPrompt(){
     return ">> ";
 }
 
-// this is a simple iterator - it has a list of strings which
-// it uses as candidate matches. The next() method will return
-// the next string which matches.
+/// this is a simple autocomplete iterator - it is given a list of strings which
+/// it uses to try to complete the user's input when TAB is pressed.
+/// Feel free to copy this class for use in your own code. See the main() function
+/// below for how to use it.
 
 class CommandAutocompleteIterator : public completer::Iterator {
-    /// the list we have
+    /// our list of "commands" - single word strings which can complete the input
     const char **commands;
-    // the item in the list we're currently iterating
+    /// the item in the list we're currently iterating
     const char **ptr;
     
-    
-    // the data passed to first, which we store.
-    // Other implementations might construct a list of candidates
-    // in first()
+    /// the data passed to first(), which we store.
+    /// Other implementations might construct a list of candidates
+    /// in first().
     
     const char *strstart;
     int len;
           
 public:
     
+    /// constructor - takes an array of strings (possible commands) which
+    /// is terminated by a NULL.
     CommandAutocompleteIterator(const char **c){
         commands = c;
         ptr=NULL;
     }
     
-    // get the first item, given the start of the word entered
-    // so far and its length.
+    /// get the first item, given the start of the word entered
+    /// so far and its length.
     
     virtual void first(const char *stringstart,int length){
         strstart = stringstart;
@@ -44,14 +46,17 @@ public:
         ptr = commands;
     }
     
-    // skip (if necessary) to the next matching item
-    // return the next item and increment the pointer
+    /// skip (if necessary) to the next matching item
+    /// return the next item and increment the pointer
     virtual const char *next(){
         while(*ptr && strncmp(*ptr,strstart,len))ptr++;
         return *ptr++;
     }
 };
     
+
+
+/// the main program.
 
 int main(int argc,char *argv[]){
     
@@ -80,17 +85,22 @@ int main(int argc,char *argv[]){
     };
     CommandAutocompleteIterator completerDefault(commandsDefault);
     
-    // initialise the autocompleter with the default iterator,
-    // specifying which characters count as word breaks.
+    // start up the completer, passing in the default iterator which will
+    // be used to complete words. Also specify which characters count as
+    // word breaks.
     
     completer::setup(el,&completerDefault,"\t\n ");
+
     // specify an alternative iterator for the first item
+    
     completer::setArgIterator(el,0,&completerFirst);
     
     // a standard EditLine read loop..
     for(;;){
         int count;
         const char *line = el_gets(el,&count);
+        // if we got a result, print it out (note that editline
+        // returns string with a newline at the end)
         if(line){
             printf("* %s",line);
         }

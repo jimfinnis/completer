@@ -15,34 +15,35 @@
 
 using namespace std;
 
-/*
- * 
- * UNFINISHED. Unstarted, even. Look at commandCompleterExample.cpp.
- *
- */
+/// example of a filename completer.
 
-// from libedit..
+
+// This is an undocumented function in libedit. It takes a
+// filename and expands any ~ (user-relative) names, allocating
+// a new string for the result. Because it's an undocumented function
+// it might change!
+
 extern "C" {
 char *fn_tilde_expand(const char *txt);
 }
 
+// Editline uses this to get the prompt.
 
 const char *getPrompt(){
     return ">> ";
 }
 
-inline char *mkstr(const char *s,int len){
-    char *p = (char*)malloc(len+1);
-    memcpy(p,s,len);
-    p[len]=0;
-    return p;
-}
 
-
+// This is the completion iterator. 
 
 class FileAutocompleteIterator : public completer::Iterator {
+    // list of completion candidates.
     vector<string> data;
+    // our current position in that list.
     vector<string>::iterator it;
+    
+    // add the contents of a directory to the list of completion
+    // candidates.
     
     void addDirContents(string prefix,const char *dir,
                         const char *match,int matchlen){
@@ -76,7 +77,7 @@ public:
             int len = ptr-stringstart;
             if(!len) {
                 // there is no slash, so no directory element, match
-                // against files in the cwd
+                // against files in the current working directory
                 addDirContents("",".",stringstart,length);
             } else {
                 // there is a directory element, add the matching
@@ -87,13 +88,13 @@ public:
                                ptr+1,length-len-1);
             }
         } else {
-            // a zero length argument, just add everything
+            // a zero length argument, just add everything in the current
+            // directory
             addDirContents("",".",NULL,0);
         }
         
         // if an unambiguous match, add a space if it doesn't
         // end with a slash.
-        
         
         if(data.size()==1){
             string& s = data[0];
@@ -109,9 +110,10 @@ public:
         return (*it++).c_str();
     }
     
-    // canonicalisation (tilde expansion) - this gets called
-    // before anything else happens and may replace the entire
-    // word. This returns a string which must be freed, or NULL
+    // This gets called before anything else happens and may replace
+    // the entire word. This returns a string which must be freed, or NULL.
+    // Here it is used to perform tilde expansion on filenames.
+    
     virtual const char *modString(const char *stringstart,int len){
         if(len && *stringstart=='~'){
             // make a null-terminated copy of the word
@@ -134,6 +136,9 @@ public:
 
 
 int main(int argc,char *argv[]){
+    
+    // basic EditLine and history initialisation
+    
     EditLine *el = el_init(argv[0],stdin,stdout,stderr);
     el_set(el,EL_PROMPT,&getPrompt);
     el_set(el,EL_EDITOR,"emacs");
@@ -143,15 +148,23 @@ int main(int argc,char *argv[]){
     history(hist,&ev,H_SETSIZE,800);
     el_set(el,EL_HIST,history,hist);
     
+    // create our file iterator, set up the completer with it
+    // and tell the completer which characters are word separators.
+    
     FileAutocompleteIterator fileiter;
     completer::setup(el,&fileiter,"\t\n ");
     
+    // the main loop
+    
     for(;;){
+        // standard editline read
         int count;
         const char *line = el_gets(el,&count);
-        if(line){
-            printf("* %s",line);
-        }
+        
+        // if we got a result, print it out (note that editline
+        // returns string with a newline at the end)
+        if(line)
+            printf("FILE: %s",line);
         else break;
     }
     completer::shutdown(el);
